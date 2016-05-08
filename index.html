@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>WMATA Bus Tracker</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2Y8qrLyotp9pUoczNmkw96lwawiTpTNY"></script> 
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+
+<header class="gradient">
+	<h2>WMATA Bus Tracker</h2>
+</header>
+
+<div id="load_screen"><div id="loading">Loading...</div></div>
+
+<section id="appView">
+	<div id="pick_route">
+		<p>Pick a WMATA bus route: <div id="route_id_container"><span id="route_block">Click to select</span><select id="route_id"></select></div><input placeholder="Find Route" size="6" type="text" id="route_finder" />
+		<div id="route_display">.</div>
+		<div class="button" id="route_id_button">Go!</div></p>
+	</div>
+	<div id="route_view"></div>
+	<div id="map-canvas"></div>
+</section>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+<script src="js/script.js"></script>
+</body>
+
+</html>
