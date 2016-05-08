@@ -2,9 +2,7 @@
 
 include 'includes/config.inc.php';
 
-if(!isset($_GET['action'])) {
-	//error handling
-} 
+if(!isset($_GET['action'])) return false;
 
 $action = $_GET['action'];
 
@@ -32,9 +30,7 @@ if($action === 'routes') {
 
 } else if ($action === 'position') {
 
-	if (!isset($_GET['id'])) {
-		//error handling
-	} 
+	if (!isset($_GET['id'])) return false;
 
 	$id = $_GET['id'];
 
@@ -44,10 +40,8 @@ if($action === 'routes') {
 	print_r($position);
 
 } else if ($action === 'busroute') {
-	if (!isset($_GET['id'])) {
-		//error handling
-	}  
-
+	if (!isset($_GET['id'])) return false;
+	
 	$id = $_GET['id'];
 
 	$date = date('Y-m-d');
@@ -58,7 +52,5 @@ if($action === 'routes') {
 	print_r($position);
 }
 
-
-	
 
 ?>

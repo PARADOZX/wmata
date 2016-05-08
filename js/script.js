@@ -7,6 +7,11 @@
 
 $.ajaxSetup({ cache: false });	//prevents caching.  especially for IE.
 
+var onErrorHandler = function(coll, response, options){
+	console.log('fetch error');
+	alert('Error occurred.  Please try again later.');
+};
+
 var BusPosition = Backbone.Model.extend({
 	urlRoot: 'position',
 });
@@ -22,8 +27,6 @@ var Routes = Backbone.Collection.extend({
         return response['Routes'];
     }, 
 });
-
-
 
 var RouteView = Backbone.View.extend({
 	tagName : "div",
@@ -44,6 +47,7 @@ var AppView = Backbone.View.extend({
 
 		routes.fetch({
 			success: function(collection, response){
+	
 				that.routeArr = [];
 
 				var load_screen = document.getElementById('load_screen');
@@ -53,15 +57,16 @@ var AppView = Backbone.View.extend({
 					$('#route_id').append('<option value="' + response[model].RouteID + '">' + response[model].RouteID + '</option>');
 					that.routeArr.push(response[model].RouteID);
 				}
-			}
+			}, 
+			error: onErrorHandler
 		});
 	},
 	events : {
-		"click #route_id_button" : "get_bus_position",
-		"keyup #route_finder" : "route_find",
-		"click #route_block" : "show_select"
+		"click #route_id_button" : "getBusPosition",
+		"keyup #route_finder" : "routeFind",
+		"click #route_block" : "showSelect"
 	},
-	get_bus_position : function(){
+	getBusPosition : function(){
 		if (document.getElementById('route_id').style.display != "none") {
 			var position = new BusPosition({id: document.getElementById('route_id').value});
 		} else {
@@ -76,10 +81,11 @@ var AppView = Backbone.View.extend({
 			success: function(model, response) {
 				var positionView = new PositionView({model : position});
 				this.$('#route_view').empty().append(positionView.render().el);	
-			}
+			}, 
+			error: onErrorHandler
 		});
 	},
-	route_find : function(){
+	routeFind : function(){
 		var route = document.getElementById('route_finder').value;
 		var route_display = document.getElementById('route_display');
 		route_display.style.visibility = 'visible';
@@ -101,7 +107,7 @@ var AppView = Backbone.View.extend({
 			this.route = false;
 		}
 	},
-	show_select : function(){
+	showSelect : function(){
 		var route_finder = document.getElementById('route_finder');
 		route_finder.value = '';
 
@@ -197,7 +203,8 @@ var PositionView = Backbone.View.extend({
 				for (prop in stops){
 					googleMaps.addMarker(stops[prop].Lat, stops[prop].Lon, map, stops[prop].Name, 'img/dot.png');
 				}
-			}
+			},
+			error: onErrorHandler
 		});
 	}
 });
@@ -229,6 +236,8 @@ var googleMaps = {
 		return marker;
 	}
 };
+
+
 
 
 var routes = new Routes();
