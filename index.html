@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1.0, user-scalable=no" />
     <title>WMATA Bus Tracker</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2Y8qrLyotp9pUoczNmkw96lwawiTpTNY"></script> 
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2Y8qrLyotp9pUoczNmkw96lwawiTpTNY"></script>
 </head>
 
 <body>
@@ -13,15 +14,23 @@
 	<h2>WMATA Bus Tracker</h2>
 </header>
 
-<div id="load_screen"><div id="loading">Loading...</div></div>
+<div id="load-screen"><div id="loading">Loading...</div></div>
 
-<section id="appView">
-	<div id="pick_route">
-		<p>Pick a WMATA bus route: <div id="route_id_container"><span id="route_block">Click to select</span><select id="route_id"></select></div><input placeholder="Find Route" size="6" type="text" id="route_finder" />
-		<div id="route_display">.</div>
-		<div class="button" id="route_id_button">Go!</div></p>
+<section id="app-container">
+	<div id="route-selection">
+		<div>Pick a WMATA bus route: 
+			<div id="route-select">
+				<span id="route-block">Click to select</span>
+				<select id="route-id"></select>
+			</div>
+			<div id="route-search-field">
+				<input placeholder="Find Route" size="6" type="text" id="route-finder" />
+				<div id="route-display">.</div>
+			</div>
+			<div class="button" id="route-id-button">Go!</div>
+		</div>
 	</div>
-	<div id="route_view"></div>
+	<div id="route-view"></div>
 	<div id="map-canvas"></div>
 </section>
 

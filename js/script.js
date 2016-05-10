@@ -40,7 +40,7 @@ var RouteView = Backbone.View.extend({
 });
 
 var AppView = Backbone.View.extend({
-	el: '#appView',
+	el: '#app-container',
 	initialize : function(routes){
 		this.collection = routes;
 		var that = this;
@@ -50,11 +50,10 @@ var AppView = Backbone.View.extend({
 	
 				that.routeArr = [];
 
-				var load_screen = document.getElementById('load_screen');
-				document.body.removeChild(load_screen);
+				document.body.removeChild(document.getElementById('load-screen'));
 				
 				for (model in response){
-					$('#route_id').append('<option value="' + response[model].RouteID + '">' + response[model].RouteID + '</option>');
+					$('#route-id').append('<option value="' + response[model].RouteID + '">' + response[model].RouteID + '</option>');
 					that.routeArr.push(response[model].RouteID);
 				}
 			}, 
@@ -62,16 +61,16 @@ var AppView = Backbone.View.extend({
 		});
 	},
 	events : {
-		"click #route_id_button" : "getBusPosition",
-		"keyup #route_finder" : "routeFind",
-		"click #route_block" : "showSelect"
+		"click #route-id-button" : "getBusPosition",
+		"keyup #route-finder" : "routeFind",
+		"click #route-block" : "showSelect"
 	},
 	getBusPosition : function(){
-		if (document.getElementById('route_id').style.display != "none") {
-			var position = new BusPosition({id: document.getElementById('route_id').value});
+		if (document.getElementById('route-id').style.display != "none") {
+			var position = new BusPosition({id: document.getElementById('route-id').value});
 		} else {
 			if (this.route === true) {
-				var position = new BusPosition({id: document.getElementById('route_finder').value});
+				var position = new BusPosition({id: document.getElementById('route-finder').value});
 			} else {
 				alert('Route not found.  Please enter a valid bus route.');
 			}
@@ -80,23 +79,22 @@ var AppView = Backbone.View.extend({
 		position.fetch({
 			success: function(model, response) {
 				var positionView = new PositionView({model : position});
-				this.$('#route_view').empty().append(positionView.render().el);	
+				this.$('#route-view').empty().append(positionView.render().el);	
 			}, 
 			error: onErrorHandler
 		});
 	},
 	routeFind : function(){
-		var route = document.getElementById('route_finder').value;
-		var route_display = document.getElementById('route_display');
+		var route = document.getElementById('route-finder').value;
+		var route_display = document.getElementById('route-display');
 		route_display.style.visibility = 'visible';
 
-		var display_block = document.getElementById('route_block');
+		var display_block = document.getElementById('route-block');
 		display_block.style.display = "inline-block";
 		display_block.style.color = "#aaa";
 
-		var route_id = document.getElementById('route_id');
-		route_id.style.display = "none";
-
+		document.getElementById('route-id').style.display = "none";
+		
 		var index = this.routeArr.indexOf(route);
 		
 		if(this.routeArr.indexOf(route) > -1) {
@@ -108,17 +106,10 @@ var AppView = Backbone.View.extend({
 		}
 	},
 	showSelect : function(){
-		var route_finder = document.getElementById('route_finder');
-		route_finder.value = '';
-
-		var route_display = document.getElementById('route_display');
-		route_display.style.visibility = 'hidden';
-
-		var display_block = document.getElementById('route_block');
-		display_block.style.display = "none";
-
-		var route_id = document.getElementById('route_id');
-		route_id.style.display = "inline-block";
+		document.getElementById('route-finder').value = '';
+		document.getElementById('route-display').style.visibility = 'hidden';
+		document.getElementById('route-block').style.display = "none";	
+		document.getElementById('route-id').style.display = "inline-block";
 	}
 });
 
@@ -236,8 +227,6 @@ var googleMaps = {
 		return marker;
 	}
 };
-
-
 
 
 var routes = new Routes();

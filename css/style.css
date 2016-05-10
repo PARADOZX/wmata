@@ -2,7 +2,7 @@
 	margin : 0;
  	padding: 0;
 }
-#appView {
+#app-container {
     margin-top: 10px;
     width: 960px;
     margin: 0 auto;
@@ -21,18 +21,10 @@ body {
     border: 1px black solid;
     cursor: pointer;
 }
-.gradient {
-    background: -webkit-linear-gradient(white, #FF4747); 
-    background: -o-linear-gradient(white, #FF4747); 
-    background: -moz-linear-gradient(white, #FF4747); 
-    background: linear-gradient(white, #FF4747); 
-}
 header {
-	padding: 15px;
-	border-bottom: 1px #aaa solid;
-    box-shadow: 0px 0px 5px #aaa;
+	
 }
-#load_screen {
+#load-screen {
     width: 100%;
     height: 1600px;
     background: #000;
@@ -41,7 +33,7 @@ header {
     z-index: 10;
     top: 0px;
 }
-#load_screen > #loading {
+#loading {
    	color: #FFF;
     width: 120px;
     height: 24px;
@@ -53,23 +45,23 @@ header {
   	margin: 0 auto; 
   	padding: 0;
 }
-#pick_route {
+#route-selection {
     border-bottom: 1px #aaa solid;
 }
-#route_block {
-    display: none;
+#route-block {
+    /*display: none;*/
 }
-#route_finder {
+#route-finder {
     margin: 15px;
     border: none;
 }
 input[type=text]:focus {
     border: none;
 }
-#route_display {
+#route-display {
     visibility: hidden;
 }
-#route_id_container {
+#route-select {
     width: 170px;
     display: inline-block;
     margin: 0 auto;
