@@ -16,21 +16,24 @@
 
 <div id="load-screen"><div id="loading">Loading...</div></div>
 
-<section id="app-container">
-	<div id="route-selection">
-		<div>Pick a WMATA bus route: 
+<section id="route-container">
+	<h3>Select Bus Route</h3>
+		<!-- <div id="route-selection-wrapper"> -->
 			<div id="route-select">
 				<span id="route-block">Click to select</span>
 				<select id="route-id"></select>
 			</div>
 			<div id="route-search-field">
 				<input placeholder="Find Route" size="6" type="text" id="route-finder" />
-				<div id="route-display">.</div>
+				<div id="route-search-display">.</div>
 			</div>
-			<div class="button" id="route-id-button">Go!</div>
-		</div>
-	</div>
-	<div id="route-view"></div>
+		<!-- </div> -->
+		<!-- <div id="route-search-wrapper"> -->
+			<a id="route-id-button">Go!</a>
+		<!-- </div> -->
+</section>
+<section>
+	<div id="map-title"></div>
 	<div id="map-canvas"></div>
 </section>
 

@@ -40,7 +40,7 @@ var RouteView = Backbone.View.extend({
 });
 
 var AppView = Backbone.View.extend({
-	el: '#app-container',
+	el: '#route-container',
 	initialize : function(routes){
 		this.collection = routes;
 		var that = this;
@@ -79,14 +79,14 @@ var AppView = Backbone.View.extend({
 		position.fetch({
 			success: function(model, response) {
 				var positionView = new PositionView({model : position});
-				this.$('#route-view').empty().append(positionView.render().el);	
+				this.$('#map-title').empty().append(positionView.render().el);	
 			}, 
 			error: onErrorHandler
 		});
 	},
 	routeFind : function(){
 		var route = document.getElementById('route-finder').value;
-		var route_display = document.getElementById('route-display');
+		var route_display = document.getElementById('route-search-display');
 		route_display.style.visibility = 'visible';
 
 		var display_block = document.getElementById('route-block');
@@ -107,7 +107,7 @@ var AppView = Backbone.View.extend({
 	},
 	showSelect : function(){
 		document.getElementById('route-finder').value = '';
-		document.getElementById('route-display').style.visibility = 'hidden';
+		document.getElementById('route-search-display').style.visibility = 'hidden';
 		document.getElementById('route-block').style.display = "none";	
 		document.getElementById('route-id').style.display = "inline-block";
 	}

@@ -11,18 +11,11 @@ body {
     text-align: center;
     font-family: Verdana;
 }
-.button {
-    display: inline-block;
-    margin: 10px;
-    height: 50px;
-    width: 150px;
-    line-height: 50px;
-    text-align: center;
-    border: 1px black solid;
-    cursor: pointer;
-}
 header {
 	
+}
+input[type=text]:focus {
+    border: none;
 }
 #load-screen {
     width: 100%;
@@ -45,9 +38,6 @@ header {
   	margin: 0 auto; 
   	padding: 0;
 }
-#route-selection {
-    border-bottom: 1px #aaa solid;
-}
 #route-block {
     /*display: none;*/
 }
@@ -55,10 +45,20 @@ header {
     margin: 15px;
     border: none;
 }
-input[type=text]:focus {
-    border: none;
+#route-id-button {
+    display: inline-block;
+    margin: 10px;
+    height: 50px;
+    width: 150px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px black solid;
+    cursor: pointer;
 }
-#route-display {
+#route-search-wrapper {
+    display: inline-block;
+}
+#route-search-display {
     visibility: hidden;
 }
 #route-select {
@@ -66,3 +66,9 @@ input[type=text]:focus {
     display: inline-block;
     margin: 0 auto;
 }
+#route-selection-wrapper {
+    display: inline-block;
+    vertical-align: top;
+    /*border-bottom: 1px #aaa solid;*/
+}
+
