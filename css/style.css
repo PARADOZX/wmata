@@ -11,8 +11,12 @@ body {
     text-align: center;
     font-family: Verdana;
 }
-header {
-	
+header h2{
+	padding: 30px;
+}
+.ib {
+    display: inline-block;
+    vertical-align: top;
 }
 input[type=text]:focus {
     border: none;
@@ -42,33 +46,53 @@ input[type=text]:focus {
     /*display: none;*/
 }
 #route-finder {
-    margin: 15px;
-    border: none;
+    width: 100%;
+    height:25px;
+    font-size: 16px;
+    border-radius: 5px;
+    text-align: center;
+    color: white;
+    border: 1px solid skyblue;
+    background-color: skyblue;
+}
+#route-id {
+    width: 100%;
+    height:25px;
+    font-size: 16px;
+    border-radius: 5px;
+    text-align: center;
+    color: white;
+    border: 1px solid skyblue;
+    background-color: skyblue;
 }
 #route-id-button {
     display: inline-block;
     margin: 10px;
-    height: 50px;
-    width: 150px;
-    line-height: 50px;
-    text-align: center;
-    border: 1px black solid;
+    height: 40px;
+    width: 130px;
+    line-height: 40px;
+    text-align: center; 
+    color: white;
+    background-color: #ffabab;
+    border-radius: 5px;
+    letter-spacing: 2px;
     cursor: pointer;
+}
+#route-search-field {
+    width: 120px;
 }
 #route-search-wrapper {
     display: inline-block;
 }
 #route-search-display {
     visibility: hidden;
+    font-size: 12px;
 }
 #route-select {
-    width: 170px;
-    display: inline-block;
+    width: 120px;
     margin: 0 auto;
 }
-#route-selection-wrapper {
-    display: inline-block;
-    vertical-align: top;
-    /*border-bottom: 1px #aaa solid;*/
+#selection-container {
+    
 }
 

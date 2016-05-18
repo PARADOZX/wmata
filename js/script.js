@@ -20,6 +20,18 @@ var BusRoute = Backbone.Model.extend({
 	urlRoot: 'busroute',
 });
 
+var BusIncidents = Backbone.Collection.extend({
+	url: 'busincidents',
+	// model: 'BusIncident',
+	parse : function(response){	
+        return response['BusIncidents'];
+    }, 
+});
+
+var BusIncident = Backbone.Model.extend({
+	urlRoot: 'busincident'	
+});
+
 var Routes = Backbone.Collection.extend({
 	url: 'routes',
 	// model: Route,
@@ -41,13 +53,15 @@ var RouteView = Backbone.View.extend({
 
 var AppView = Backbone.View.extend({
 	el: '#route-container',
-	initialize : function(routes){
+	initialize : function(){
+		var routes = new Routes();
+		
 		this.collection = routes;
 		var that = this;
 
 		routes.fetch({
 			success: function(collection, response){
-	
+
 				that.routeArr = [];
 
 				document.body.removeChild(document.getElementById('load-screen'));
@@ -59,6 +73,7 @@ var AppView = Backbone.View.extend({
 			}, 
 			error: onErrorHandler
 		});
+
 	},
 	events : {
 		"click #route-id-button" : "getBusPosition",
@@ -78,8 +93,11 @@ var AppView = Backbone.View.extend({
 
 		position.fetch({
 			success: function(model, response) {
-				var positionView = new PositionView({model : position});
-				this.$('#map-title').empty().append(positionView.render().el);	
+				var googleMapView = new GoogleMapView({model : model});
+				this.$('#map-title').empty().append(googleMapView.render().el);	
+				
+				var infoView = new InfoView({model : model});
+				infoView.render();
 			}, 
 			error: onErrorHandler
 		});
@@ -113,12 +131,58 @@ var AppView = Backbone.View.extend({
 	}
 });
 
-var PositionView = Backbone.View.extend({
+var InfoView = Backbone.View.extend({
+	initialize: function(){
+		this.busIncidentView = new BusIncidentView({model : this.model});
+	},
+	render: function(){
+		this.busIncidentView.render();
+	}
+});
+
+var BusIncidentView = Backbone.View.extend({
+	tagName: 'div',
+	el: '#info-incident',
+	initialize: function(){
+	
+		// model
+		var busincident = new BusIncident({id:this.model.get('id')});
+		busincident.fetch({
+			success: function(model, response){
+				var incidents_array = model.get('BusIncidents');
+				if(incidents_array.length > 0) {
+					// console.log(incidents_array);
+				}
+			},
+			error: onErrorHandler
+		});
+		
+		//collection
+		// this.collection = new BusIncidents();
+	
+  		//this.collection.bind('add', this.onModelAdded, this);
+        
+		// this.collection.fetch({
+		// 	error: onErrorHandler
+		// });
+	},
+	onModelAdded: function(){
+		console.log('hi');
+		this.$el.append('oh hi');
+	}, 
+	render: function(){
+		// this.$el.html('wtf man?!');
+		// return this;
+	}
+});
+
+var GoogleMapView = Backbone.View.extend({
 	tagName: "div",
 	initialize: function(){
 	},
 	render : function(){
 		var model = this.model.toJSON();
+		
 		model = model['BusPositions'];
 
 		if (model.length > 0){
@@ -126,6 +190,7 @@ var PositionView = Backbone.View.extend({
 			var options = googleMaps.mapOptions(12, model[0].Lat, model[0].Lon);
 			var map = googleMaps.initialize('map-canvas', options);
 			
+			//zoom and centers the map so all bus positions are displayed initially.
 			if (model.length > 1){
 				var southwest = {}, 
 					northeast = {}, 
@@ -166,7 +231,7 @@ var PositionView = Backbone.View.extend({
 		var marker = [];
 
 		for(i=0; i<model.length; i++) {
-			marker[i] = googleMaps.addMarker(model[i].Lat, model[i].Lon, map, model[i].TripHeadsign + " (" + model[i].DirectionText + "BOUND)");
+			marker[i] = googleMaps.addMarker(model[i].Lat, model[i].Lon, map, "Bus ID: " + model[i].RouteID + "\n" + "Direction: " + model[i].TripHeadsign + " (" + model[i].DirectionText + "BOUND)");
 
 			google.maps.event.addListener(marker[i], 'click', function() {
 			    map.setZoom(15);
@@ -192,7 +257,12 @@ var PositionView = Backbone.View.extend({
 				var map = model.get('map');
 
 				for (prop in stops){
-					googleMaps.addMarker(stops[prop].Lat, stops[prop].Lon, map, stops[prop].Name, 'img/dot.png');
+					var marker = googleMaps.addMarker(stops[prop].Lat, stops[prop].Lon, map, stops[prop].Name, 'img/dot.png');
+					
+					google.maps.event.addListener(marker, 'click', function() {
+					    map.setZoom(15);
+					    map.setCenter(this.getPosition());
+					});
 				}
 			},
 			error: onErrorHandler
@@ -228,9 +298,6 @@ var googleMaps = {
 	}
 };
 
-
-var routes = new Routes();
-
-var appView = new AppView(routes);
+var appView = new AppView();
 
 })();

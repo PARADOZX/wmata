@@ -4,6 +4,8 @@ RewriteEngine on
 RewriteRule ^routes/?$ app.php?action=routes [NC]
 RewriteRule ^position/(.{1,})/?$ app.php?action=position&id=$1 [NC]
 RewriteRule ^busroute/(.{1,})/?$ app.php?action=busroute&id=$1 [NC]
+RewriteRule ^busincidents/?$ app.php?action=busincidents [NC]
+RewriteRule ^busincident/(.{1,})/?$ app.php?action=busincident&id=$1 [NC]
 RewriteCond %{REQUEST_METHOD} (PUT|DELETE)
 
 </IfModule>

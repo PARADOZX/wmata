@@ -1,5 +1,6 @@
 <?php
 
+define('api_key', '6b700f7ea9db408e9745c207da7ca827');
 class SendCurl
 {
 	protected $curl;
@@ -29,4 +30,30 @@ class SendCurl
 	}
 }
 
+
+	
+	$id = 'D3';
+
+	// $curl = new SendCurl("https://api.wmata.com/Incidents.svc/json/BusIncidents?Route=D4", true);
+	$curl = new SendCurl("https://api.wmata.com/Incidents.svc/json/BusIncidents?", true);
+	$schedule = $curl->exec();
+
+    // foreach($schedule as $inc)
+    // {
+    //     echo $inc . "<br/>";
+    // }
+    
+    // $schedule = json_decode($schedule);
+    // $arr = $schedule->BusIncidents;
+    
+    
+    
+    // echo is_array($arr);
+    // echo $arr[0];
+    // foreach($arr as $key=>$value)
+    // {
+    //     echo $arr[$key] . "<br/>";
+    // }
+    
+	print_r($schedule);
 ?>
