@@ -66,7 +66,8 @@ if($action === 'routes') {
 	$id = $_GET['id'];
 
 	//retrieve backbone model 
-	$curl = new SendCurl("https://api.wmata.com/Incidents.svc/json/BusIncidents?Route=$id", true);
+	$curl = new SendCurl("https://api.wmata.com/Incidents.svc/json/BusIncidents", true);
+	// $curl = new SendCurl("https://api.wmata.com/Incidents.svc/json/BusIncidents?Route=$id", true);
 
 	$incident = $curl->exec();
 	

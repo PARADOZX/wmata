@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+    <!--<meta name="viewport" content="initial-scale=1, maximum-scale=1.0, user-scalable=no" />-->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
     <title>WMATA Bus Tracker</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2Y8qrLyotp9pUoczNmkw96lwawiTpTNY"></script>
@@ -19,6 +20,17 @@
 			</ul>
 		</div>
 	</script>
+	<script type="text/template" id="incident-template">
+		<ul>
+		<% _.each(incidents, function(i){ %>
+			<li>
+				<p><%= i.IncidentType %></p>
+				<p><%= i.Description %></p>
+				<p>Routes Affected: <% _.each(i.RoutesAffected, function(j){ %> <%= j %> <% }); %></p>
+			</li>
+		<% }); %>
+		</ul>
+	</script>
 </head>
 <body>
 
@@ -29,19 +41,21 @@
 <div id="load-screen"><div id="loading">Loading...</div></div>
 
 <section id="route-container">
-	<h3>Select Bus Route</h3>
-		<!-- <div id="route-selection-wrapper"> -->
-			<div id="route-select">
-				<span id="route-block">Click to select</span>
+		<!--<div id="route-selection-wrapper"> -->
+			<!--<span>Select </span>-->
+			<div class="ib" id="route-select">
+				<div id="route-block">Select</div>
 				<select id="route-id"></select>
 			</div>
-			<div id="route-search-field">
-				<input placeholder="Find Route" size="6" type="text" id="route-finder" />
+			<span>or</span>
+			<div class="ib" id="route-search">
+				<div id="route-search-title">Search</div>
+				<input placeholder="type here" size="6" type="text" id="route-search-input" />
 				<div id="route-search-display">.</div>
 			</div>
-		<!-- </div> -->
+		 <!--</div> -->
 		<!-- <div id="route-search-wrapper"> -->
-			<a id="route-id-button">Go!</a>
+			<button id="route-id-button">Go!</button>
 		<!-- </div> -->
 </section>
 <section id="map-container">

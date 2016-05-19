@@ -59,6 +59,9 @@ var RouteView = Backbone.View.extend({
 var AppView = Backbone.View.extend({
 	el: '#route-container',
 	initialize : function(){
+		
+		this.bindEvents();
+		
 		var routes = new Routes();
 		
 		this.collection = routes;
@@ -80,17 +83,29 @@ var AppView = Backbone.View.extend({
 		});
 
 	},
+	bindEvents: function(){
+		$('#route-select').on('click', function(){
+			$(this).addClass('highlight');
+			$('#route-search').removeClass('highlight');
+		});	
+		$('#route-search').on('click', function(){
+			$(this).addClass('highlight');
+			$('#route-select').removeClass('highlight');
+		});	
+	},
 	events : {
 		"click #route-id-button" : "getBusPosition",
-		"keyup #route-finder" : "routeFind",
+		"keyup #route-search-input" : "routeSearch",
 		"click #route-block" : "showSelect"
 	},
 	getBusPosition : function(){
-		if (document.getElementById('route-id').style.display != "none") {
+		if ($('#route-select').hasClass('highlight')) {
 			var position = new BusPosition({id: document.getElementById('route-id').value});
 		} else {
 			if (this.route === true) {
-				var position = new BusPosition({id: document.getElementById('route-finder').value});
+				var searched_route = document.getElementById('route-search-input').value;
+				searched_route = searched_route.toUpperCase();
+				var position = new BusPosition({id: searched_route});
 			} else {
 				alert('Route not found.  Please enter a valid bus route.');
 			}
@@ -102,21 +117,21 @@ var AppView = Backbone.View.extend({
 				this.$('#map-title').empty().append(googleMapView.render().el);	
 				
 				var infoView = new InfoView({model : model});
-				infoView.render();
 			}, 
 			error: onErrorHandler
 		});
 	},
-	routeFind : function(){
-		var route = document.getElementById('route-finder').value;
+	routeSearch : function(){
+		var route = document.getElementById('route-search-input').value;
+		route = route.toUpperCase();
 		var route_display = document.getElementById('route-search-display');
 		route_display.style.visibility = 'visible';
 
-		var display_block = document.getElementById('route-block');
-		display_block.style.display = "inline-block";
-		display_block.style.color = "#aaa";
+		// var display_block = document.getElementById('route-block');
+		// display_block.style.display = "inline-block";
+		// display_block.style.color = "#aaa";
 
-		document.getElementById('route-id').style.display = "none";
+		// document.getElementById('route-id').style.display = "none";
 		
 		var index = this.routeArr.indexOf(route);
 		
@@ -129,36 +144,42 @@ var AppView = Backbone.View.extend({
 		}
 	},
 	showSelect : function(){
-		document.getElementById('route-finder').value = '';
-		document.getElementById('route-search-display').style.visibility = 'hidden';
-		document.getElementById('route-block').style.display = "none";	
-		document.getElementById('route-id').style.display = "inline-block";
+		// document.getElementById('route-search-input').value = '';
+		// document.getElementById('route-search-display').style.visibility = 'hidden';
+		// document.getElementById('route-block').style.display = "none";	
+		// document.getElementById('route-id').style.display = "inline-block";
 	}
 });
 
 var InfoView = Backbone.View.extend({
 	initialize: function(){
 		this.busIncidentView = new BusIncidentView({model : this.model});
-	},
-	render: function(){
-		this.busIncidentView.render();
 	}
 });
 
 var BusIncidentView = Backbone.View.extend({
 	tagName: 'div',
 	el: '#info-incident',
+	template: _.template($('#incident-template').html()),
 	initialize: function(){
-	
+		var that = this;
 		// model
 		var busincident = new BusIncident({id:this.model.get('id')});
 		busincident.fetch({
 			success: function(model, response){
-				var incidents_array = model.get('BusIncidents');
-					console.log(incidents_array);
-				// if(incidents_array.length > 0) {
-				// 	//do something
-				// }
+				var incidents = model.get('BusIncidents');
+					console.log(incidents);
+				if(incidents.length > 0) {
+					var incidentsObj = {};
+					incidentsObj.incidents = [];
+					
+					_.each(incidents, function(i){
+						incidentsObj.incidents.push(i);
+					});
+					
+					that.busIncidents = incidentsObj;
+					that.render();
+				}
 			},
 			error: onErrorHandler
 		});
@@ -177,8 +198,8 @@ var BusIncidentView = Backbone.View.extend({
 		this.$el.append('oh hi');
 	}, 
 	render: function(){
-		// this.$el.html('wtf man?!');
-		// return this;
+		console.log(this.busIncidents);
+		this.$el.html(this.template(this.busIncidents));
 	}
 });
 
