@@ -6,8 +6,20 @@
     <title>WMATA Bus Tracker</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2Y8qrLyotp9pUoczNmkw96lwawiTpTNY"></script>
+    <script type="text/template" id="stop-schedule-template">
+		<header>
+			<p>Stop Schedule for <%= StopName %></p>
+			<p><%= TripHeadsign %> <%= TripDirection %></p>
+		</header>
+		<div>	
+			<ul>
+			<% _.each(ScheduleTime, function(stop) { %> 
+	    		<li><%= stop %></li>
+			<% }); %>
+			</ul>
+		</div>
+	</script>
 </head>
-
 <body>
 
 <header class="gradient">
@@ -39,6 +51,7 @@
 <section id="information-container">
 	<div id="info-main">
 		<div id="info-incident"></div>
+		<div id="info-stop-schedule"></div>
 	</div>
 </section>
 
@@ -46,6 +59,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
 <script src="js/script.js"></script>
+
 </body>
 
 </html>

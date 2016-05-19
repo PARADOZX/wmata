@@ -71,6 +71,16 @@ if($action === 'routes') {
 	$incident = $curl->exec();
 	
 	print_r($incident);
+} else if ($action === 'stopschedule') {
+
+	if (!isset($_GET['id'])) return false;
+	$id = $_GET['id'];
+	
+	$curl = new SendCurl("https://api.wmata.com/Bus.svc/json/jStopSchedule?StopID=$id", true);
+
+	$incident = $curl->exec();
+	
+	print_r($incident);
 }
 
 

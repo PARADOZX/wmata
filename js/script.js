@@ -20,6 +20,11 @@ var BusRoute = Backbone.Model.extend({
 	urlRoot: 'busroute',
 });
 
+var StopSchedule = Backbone.Model.extend({
+	urlRoot: 'stopschedule', 
+	idAttribute: 'StopID'
+});
+
 var BusIncidents = Backbone.Collection.extend({
 	url: 'busincidents',
 	// model: 'BusIncident',
@@ -150,13 +155,13 @@ var BusIncidentView = Backbone.View.extend({
 		busincident.fetch({
 			success: function(model, response){
 				var incidents_array = model.get('BusIncidents');
-				if(incidents_array.length > 0) {
-					// console.log(incidents_array);
-				}
+					console.log(incidents_array);
+				// if(incidents_array.length > 0) {
+				// 	//do something
+				// }
 			},
 			error: onErrorHandler
 		});
-		
 		//collection
 		// this.collection = new BusIncidents();
 	
@@ -166,6 +171,7 @@ var BusIncidentView = Backbone.View.extend({
 		// 	error: onErrorHandler
 		// });
 	},
+	//binded to collection
 	onModelAdded: function(){
 		console.log('hi');
 		this.$el.append('oh hi');
@@ -173,6 +179,58 @@ var BusIncidentView = Backbone.View.extend({
 	render: function(){
 		// this.$el.html('wtf man?!');
 		// return this;
+	}
+});
+
+var StopScheduleView = Backbone.View.extend({
+	tagName: 'div',
+	el: '#info-stop-schedule',
+	template: _.template($('#stop-schedule-template').html()),
+	initialize: function(options){
+		this.options = options;
+		var that = this;
+		
+		this.model.fetch({
+			success: function(model, response){
+				that.stopScheduleObj = {};
+				that.stopScheduleObj.StopName = response.Stop.Name;	
+				// console.log(response);
+				_.each(response.ScheduleArrivals, function(i){
+					if(i.RouteID == that.options.busID) {
+						
+						if(!that.stopScheduleObj.TripDirection) {
+							that.stopScheduleObj.ScheduleTime = [];
+							that.stopScheduleObj.TripDirection = i.TripDirectionText;
+							that.stopScheduleObj.TripHeadsign = i.TripHeadsign;
+						}
+						var parsedScheduleTime = that.parseTime(i.ScheduleTime)
+						that.stopScheduleObj.ScheduleTime.push(parsedScheduleTime); 
+				
+					}
+				});
+		
+				that.render();
+			}			
+		});
+	}, 
+	render: function(){
+		this.$el.html(this.template(this.stopScheduleObj));
+	},
+	parseTime: function(time){
+		var index = time.indexOf('T');
+		var croppedTime = time.substr(index+1, 5);
+		console.log(croppedTime);
+		var standardTime = this.militaryToStandard(croppedTime);
+		
+		return standardTime;
+	},
+	militaryToStandard: function (fourDigitTime) {
+	    var hours24 = parseInt(fourDigitTime.substring(0, 2),10);
+	    var hours = ((hours24 + 11) % 12) + 1;
+	    var amPm = hours24 > 11 ? 'pm' : 'am';
+	    var minutes = fourDigitTime.substring(2);
+	
+	    return hours + '' + minutes + amPm;
 	}
 });
 
@@ -246,10 +304,16 @@ var GoogleMapView = Backbone.View.extend({
 		return this;
 	}, 
 	addBusRoute : function(googlemap){
+		var that = this;
+		
 		var busroute = new BusRoute({id: this.model.get('id'), map: googlemap});
 		busroute.fetch({
 			success : function(model, response){
 				var stops = response.Direction0.Stops;
+				
+				//reference the BusPosition model for route #
+				var busPosition = that.model;
+				
 				//if response has an array for both route directions then concat 
 				if(response.Direction1){
 					var stops = stops.concat(response.Direction1.Stops);
@@ -257,12 +321,19 @@ var GoogleMapView = Backbone.View.extend({
 				var map = model.get('map');
 
 				for (prop in stops){
-					var marker = googleMaps.addMarker(stops[prop].Lat, stops[prop].Lon, map, stops[prop].Name, 'img/dot.png');
+					var marker = googleMaps.addMarker(stops[prop].Lat, stops[prop].Lon, map, stops[prop].Name + '\n' + 'Click for stop schedule.', 'img/dot.png');
 					
-					google.maps.event.addListener(marker, 'click', function() {
-					    map.setZoom(15);
-					    map.setCenter(this.getPosition());
-					});
+					//use closure for event bind since returned marker above is async
+					(function(stop){
+						
+						var stopSchedule = new StopSchedule(stop);
+						
+						google.maps.event.addListener(marker, 'click', function() {
+						    map.setZoom(15);
+						    map.setCenter(this.getPosition());
+						    var stopscheduleview = new StopScheduleView({model:stopSchedule, busID:busPosition.get('id')});
+						});
+					})(stops[prop]);
 				}
 			},
 			error: onErrorHandler
