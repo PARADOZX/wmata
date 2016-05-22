@@ -1,0 +1,9 @@
+<ul>
+<% _.each(incidents, function(i){ %>
+	<li>
+		<p><%= i.IncidentType %></p>
+		<p><%= i.Description %></p>
+		<p>Routes Affected: <% _.each(i.RoutesAffected, function(j){ %> <%= j %> <% }); %></p>
+	</li>
+<% }); %>
+</ul>

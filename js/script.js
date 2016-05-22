@@ -96,7 +96,6 @@ var AppView = Backbone.View.extend({
 	events : {
 		"click #route-id-button" : "getBusPosition",
 		"keyup #route-search-input" : "routeSearch",
-		"click #route-block" : "showSelect"
 	},
 	getBusPosition : function(){
 		if ($('#route-select').hasClass('highlight')) {
@@ -142,12 +141,6 @@ var AppView = Backbone.View.extend({
 			route_display.innerHTML = 'No route found.';	
 			this.route = false;
 		}
-	},
-	showSelect : function(){
-		// document.getElementById('route-search-input').value = '';
-		// document.getElementById('route-search-display').style.visibility = 'hidden';
-		// document.getElementById('route-block').style.display = "none";	
-		// document.getElementById('route-id').style.display = "inline-block";
 	}
 });
 
@@ -160,7 +153,7 @@ var InfoView = Backbone.View.extend({
 var BusIncidentView = Backbone.View.extend({
 	tagName: 'div',
 	el: '#info-incident',
-	template: _.template($('#incident-template').html()),
+	// template: _.template($('#incident-template').html()),
 	initialize: function(){
 		var that = this;
 		// model
@@ -168,7 +161,7 @@ var BusIncidentView = Backbone.View.extend({
 		busincident.fetch({
 			success: function(model, response){
 				var incidents = model.get('BusIncidents');
-					console.log(incidents);
+					// console.log(incidents);
 				if(incidents.length > 0) {
 					var incidentsObj = {};
 					incidentsObj.incidents = [];
@@ -183,14 +176,6 @@ var BusIncidentView = Backbone.View.extend({
 			},
 			error: onErrorHandler
 		});
-		//collection
-		// this.collection = new BusIncidents();
-	
-  		//this.collection.bind('add', this.onModelAdded, this);
-        
-		// this.collection.fetch({
-		// 	error: onErrorHandler
-		// });
 	},
 	//binded to collection
 	onModelAdded: function(){
@@ -199,14 +184,15 @@ var BusIncidentView = Backbone.View.extend({
 	}, 
 	render: function(){
 		console.log(this.busIncidents);
-		this.$el.html(this.template(this.busIncidents));
+		// this.$el.html(this.template(this.busIncidents));
+		this.$el.html(render('incident-template', this.busIncidents));
 	}
 });
 
 var StopScheduleView = Backbone.View.extend({
 	tagName: 'div',
 	el: '#info-stop-schedule',
-	template: _.template($('#stop-schedule-template').html()),
+	// template: _.template($('#stop-schedule-template').html()),
 	initialize: function(options){
 		this.options = options;
 		var that = this;
@@ -235,12 +221,13 @@ var StopScheduleView = Backbone.View.extend({
 		});
 	}, 
 	render: function(){
-		this.$el.html(this.template(this.stopScheduleObj));
+		// this.$el.html(this.template(this.stopScheduleObj));
+		this.$el.html(render('stop-schedule-template', this.stopScheduleObj));
 	},
 	parseTime: function(time){
 		var index = time.indexOf('T');
 		var croppedTime = time.substr(index+1, 5);
-		console.log(croppedTime);
+		
 		var standardTime = this.militaryToStandard(croppedTime);
 		
 		return standardTime;
@@ -389,6 +376,33 @@ var googleMaps = {
 		return marker;
 	}
 };
+
+//uses synchronous $ajax to include and cache templates from templates folder
+//alternative to keeping templates in script tags in index.html
+function render(tmpl_name, tmpl_data) {
+    if ( !render.tmpl_cache ) { 
+        render.tmpl_cache = {};
+    }
+
+    if ( ! render.tmpl_cache[tmpl_name] ) {
+        var tmpl_dir = '/templates';
+        var tmpl_url = tmpl_dir + '/' + tmpl_name + '.html';
+
+        var tmpl_string;
+        $.ajax({
+            url: tmpl_url,
+            method: 'GET',
+            async: false,
+            success: function(data) {
+                tmpl_string = data;
+            }
+        });
+
+        render.tmpl_cache[tmpl_name] = _.template(tmpl_string);
+    }
+
+    return render.tmpl_cache[tmpl_name](tmpl_data);
+}
 
 var appView = new AppView();
 

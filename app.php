@@ -1,6 +1,6 @@
 <?php
 
-include 'includes/config.inc.php';
+include 'conf/config.inc.php';
 
 if(!isset($_GET['action'])) return false;
 

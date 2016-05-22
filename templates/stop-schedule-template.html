@@ -1,0 +1,11 @@
+<h2>
+	<p>Stop Schedule for <%= StopName %></p>
+	<p><%= TripHeadsign %> <%= TripDirection %></p>
+</h2>
+<div>	
+	<ul>
+	<% _.each(ScheduleTime, function(stop) { %> 
+		<li><%= stop %></li>
+	<% }); %>
+	</ul>
+</div>
