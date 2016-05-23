@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <!--<meta name="viewport" content="initial-scale=1, maximum-scale=1.0, user-scalable=no" />-->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
     <title>WMATA Bus Tracker</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2Y8qrLyotp9pUoczNmkw96lwawiTpTNY"></script>
@@ -42,31 +42,28 @@
 <div id="load-screen"><div id="loading">Loading...</div></div>
 
 <section id="route-container">
-		<!--<div id="route-selection-wrapper"> -->
-			<!--<span>Select </span>-->
-			<div class="ib" id="route-select">
-				<div id="route-block">Select</div>
-				<select id="route-id"></select>
-			</div>
-			<span>or</span>
-			<div class="ib" id="route-search">
-				<div id="route-search-title">Search</div>
-				<input placeholder="type here" size="6" type="text" id="route-search-input" />
-				<div id="route-search-display">.</div>
-			</div>
-		 <!--</div> -->
-		<!-- <div id="route-search-wrapper"> -->
-			<button id="route-id-button">Go!</button>
-		<!-- </div> -->
+	<div class="ib" id="route-select">
+		<div id="route-block">select</div>
+		<select id="route-id"></select>
+	</div>
+	<span>or</span>
+	<div class="ib" id="route-search">
+		<div id="route-search-title">search</div>
+		<input placeholder="type here" size="6" type="text" id="route-search-input" />
+		<div id="route-search-display">.</div>
+	</div>
+	<button id="route-id-button">go</button>
 </section>
+<section id="map-title"></section>
 <section id="map-container">
-	<div id="map-title"></div>
 	<div id="map-canvas"></div>
 </section>
 <section id="information-container">
 	<div id="info-main">
 		<div id="info-incident"></div>
-		<div id="info-stop-schedule"></div>
+		<div id="info-stop-schedule-container"> 
+			<div id="info-stop-schedule"></div>
+		</div>
 	</div>
 </section>
 

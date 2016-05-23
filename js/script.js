@@ -116,6 +116,8 @@ var AppView = Backbone.View.extend({
 				this.$('#map-title').empty().append(googleMapView.render().el);	
 				
 				var infoView = new InfoView({model : model});
+				
+				clearInfoContainer();
 			}, 
 			error: onErrorHandler
 		});
@@ -222,7 +224,9 @@ var StopScheduleView = Backbone.View.extend({
 	}, 
 	render: function(){
 		// this.$el.html(this.template(this.stopScheduleObj));
+		$('#info-stop-schedule-container').css('display', 'block');
 		this.$el.html(render('stop-schedule-template', this.stopScheduleObj));
+		jumpToYCoordinate(document.getElementById('info-stop-schedule-container'));
 	},
 	parseTime: function(time){
 		var index = time.indexOf('T');
@@ -402,6 +406,17 @@ function render(tmpl_name, tmpl_data) {
     }
 
     return render.tmpl_cache[tmpl_name](tmpl_data);
+}
+
+function jumpToYCoordinate(elem) {
+	var rect = elem.getBoundingClientRect();
+	var top = rect.top;
+	window.scrollTo(0, top);
+}
+
+function clearInfoContainer() {
+	$('#info-incident, #info-stop-schedule').html("");
+	$('#info-stop-schedule-container').css('display', 'none');
 }
 
 var appView = new AppView();
