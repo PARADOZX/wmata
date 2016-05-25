@@ -35,19 +35,19 @@ class SendCurl
 	$id = 'D3';
 
 	//incidents
-	// $curl = new SendCurl("https://api.wmata.com/Incidents.svc/json/BusIncidents?Route=D4", true);
-	$curl = new SendCurl("https://api.wmata.com/Incidents.svc/json/BusIncidents", true);
+	// $curl = new SendCurl("http://api.wmata.com/Incidents.svc/json/BusIncidents?Route=D4", true);
+	// $curl = new SendCurl("http://api.wmata.com/Incidents.svc/json/BusIncidents", true);
 	
 	
 	//elevator
-	// $curl = new SendCurl("https://api.wmata.com/Incidents.svc/json/ElevatorIncidents", true);
+	$curl = new SendCurl("http://api.wmata.com/Incidents.svc/json/ElevatorIncidents", true);
 	
 	//train incidents
-	// $curl = new SendCurl("https://api.wmata.com/Incidents.svc/json/Incidents", true);
+	// $curl = new SendCurl("http://api.wmata.com/Incidents.svc/json/Incidents", true);
 	
 	
 	//stop schedule
-	// $curl = new SendCurl("https://api.wmata.com/Bus.svc/json/jStopSchedule?StopID=4001032", true);
+	// $curl = new SendCurl("http://api.wmata.com/Bus.svc/json/jStopSchedule?StopID=4001032", true);
 	
 	$schedule = $curl->exec();
 
