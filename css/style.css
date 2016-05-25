@@ -184,6 +184,18 @@ input[type="text"]:focus , input[type="password"]:focus , input[type="email"]:fo
     border-bottom-left-radius: 5px;
     z-index: 10000;
 }
+#scroll-top-inside {
+    position: relative;
+    margin: 0 auto;
+    width: 0;
+    height: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    /*background-color: #FFB0AA;*/
+    border-left: 10px solid transparent;
+    border-bottom: 20px solid #FFB0AA;
+    border-right: 10px solid transparent;
+}
 #top-header {
     font-size: 36px;
     font-weight: 600;
