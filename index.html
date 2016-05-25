@@ -35,18 +35,17 @@
 </head>
 <body>
 
-<header class="gradient">
-	<h2>WMATA Bus Tracker</h2>
+<header id="top-header">
+	WMATA Bus Tracker
 </header>
 
 <div id="load-screen"><div id="loading">Loading...</div></div>
-
+<div id="scroll-top-arrow"></div>
 <section id="route-container">
 	<div class="ib" id="route-select">
 		<div id="route-block">select</div>
 		<select id="route-id"></select>
 	</div>
-	<span>or</span>
 	<div class="ib" id="route-search">
 		<div id="route-search-title">search</div>
 		<input placeholder="type here" size="6" type="text" id="route-search-input" />
@@ -54,13 +53,18 @@
 	</div>
 	<button id="route-id-button">go</button>
 </section>
+<section id="alert-container">
+	<div id="alert-flag">
+		<span>ALERT</span>
+		<div id="alert-incident"></div>	
+	</div>
+</section>	
 <section id="map-title"></section>
 <section id="map-container">
 	<div id="map-canvas"></div>
 </section>
 <section id="information-container">
 	<div id="info-main">
-		<div id="info-incident"></div>
 		<div id="info-stop-schedule-container"> 
 			<div id="info-stop-schedule"></div>
 		</div>

@@ -92,6 +92,9 @@ var AppView = Backbone.View.extend({
 			$(this).addClass('highlight');
 			$('#route-select').removeClass('highlight');
 		});	
+		$('#scroll-top-arrow').on('click', function(){
+			window.scrollTo(0,0);	
+		});
 	},
 	events : {
 		"click #route-id-button" : "getBusPosition",
@@ -113,9 +116,11 @@ var AppView = Backbone.View.extend({
 		position.fetch({
 			success: function(model, response) {
 				var googleMapView = new GoogleMapView({model : model});
+				showMap();
 				this.$('#map-title').empty().append(googleMapView.render().el);	
 				
-				var infoView = new InfoView({model : model});
+				// var infoView = new InfoView({model : model});
+				var busIncidentView = new BusIncidentView({model : model});
 				
 				clearInfoContainer();
 			}, 
@@ -146,15 +151,15 @@ var AppView = Backbone.View.extend({
 	}
 });
 
-var InfoView = Backbone.View.extend({
-	initialize: function(){
-		this.busIncidentView = new BusIncidentView({model : this.model});
-	}
-});
+// var InfoView = Backbone.View.extend({
+// 	initialize: function(){
+// 		this.busIncidentView = new BusIncidentView({model : this.model});
+// 	}
+// });
 
 var BusIncidentView = Backbone.View.extend({
 	tagName: 'div',
-	el: '#info-incident',
+	el: '#alert-incident',
 	// template: _.template($('#incident-template').html()),
 	initialize: function(){
 		var that = this;
@@ -165,6 +170,7 @@ var BusIncidentView = Backbone.View.extend({
 				var incidents = model.get('BusIncidents');
 					// console.log(incidents);
 				if(incidents.length > 0) {
+					showAlertFlag();
 					var incidentsObj = {};
 					incidentsObj.incidents = [];
 					
@@ -311,8 +317,9 @@ var GoogleMapView = Backbone.View.extend({
 
 		this.addBusRoute(map);		
 
-		var template = _.template('<h3>Current location(s) of WMATA Route <%= id %><br/>There are <%= BusPositions.length %> bus(es) on this route currently operating.</h3>', this.model.toJSON());
-		this.$el.html(template);
+		this.$el.html(render('map-title-template', this.model.toJSON()));
+		// var template = _.template('<h3>Current location(s) of WMATA Route <%= id %><br/>There are <%= BusPositions.length %> bus(es) on this route currently operating.</h3>', this.model.toJSON());
+		// this.$el.html(template);
 		return this;
 	}, 
 	addBusRoute : function(googlemap){
@@ -414,8 +421,16 @@ function jumpToYCoordinate(elem) {
 	window.scrollTo(0, top);
 }
 
+function showMap() {
+	$('#map-title, #map-container').css('display', 'block');
+}
+
+function showAlertFlag() {
+	$('#alert-flag').css('display', 'block');
+}
+
 function clearInfoContainer() {
-	$('#info-incident, #info-stop-schedule').html("");
+	$('#alert-incident, #info-stop-schedule').html("");
 	$('#info-stop-schedule-container').css('display', 'none');
 }
 
