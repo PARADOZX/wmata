@@ -174,9 +174,14 @@ input[type="text"]:focus , input[type="password"]:focus , input[type="email"]:fo
     position: fixed;
     top: 70%;
     right: 0;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     background-color: #FF7575;
+    border-top: 3px #FFB0AA solid;
+    border-left: 3px #FFB0AA solid;
+    border-bottom: 3px #FFB0AA solid;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
     z-index: 10000;
 }
 #top-header {
