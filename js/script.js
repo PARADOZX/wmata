@@ -1,8 +1,3 @@
-
-//  $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
-//       options.url = 'http://api.wmata.com/Bus.svc/json' + options.url + '?api_key=' + 'kfgpmgvfgacx98de9q3xazww';  
-//     });
-
 (function(){
 
 $.ajaxSetup({ cache: false });	//prevents caching.  especially for IE.
@@ -72,7 +67,8 @@ var AppView = Backbone.View.extend({
 
 				that.routeArr = [];
 
-				document.body.removeChild(document.getElementById('load-screen'));
+				// document.body.removeChild(document.getElementById('load-screen'));
+				$('#load-screen').remove();
 				
 				for (model in response){
 					$('#route-id').append('<option value="' + response[model].RouteID + '">' + response[model].RouteID + '</option>');
@@ -85,12 +81,13 @@ var AppView = Backbone.View.extend({
 	},
 	bindEvents: function(){
 		$('#route-select').on('click', function(){
-			$(this).addClass('highlight');
-			$('#route-search').removeClass('highlight');
+			$(this).addClass('bg-warning');
+			$('#route-search').removeClass('bg-warning');
+			$('#message-display').text('');
 		});	
 		$('#route-search').on('click', function(){
-			$(this).addClass('highlight');
-			$('#route-select').removeClass('highlight');
+			$(this).addClass('bg-warning');
+			$('#route-select').removeClass('bg-warning');
 		});	
 		$('#scroll-top-arrow').on('click', function(){
 			window.scrollTo(0,0);	
@@ -101,51 +98,52 @@ var AppView = Backbone.View.extend({
 		"keyup #route-search-input" : "routeSearch",
 	},
 	getBusPosition : function(){
-		if ($('#route-select').hasClass('highlight')) {
-			var position = new BusPosition({id: document.getElementById('route-id').value});
+		if ($('#route-select').hasClass('bg-warning')) {
+			var route_id = document.getElementById('route-id').value;
+			if(route_id != "select") {
+				var position = new BusPosition({id: route_id});
+			} else {
+				displayMessage('Select or search a valid bus route.');
+			}
 		} else {
 			if (this.route === true) {
 				var searched_route = document.getElementById('route-search-input').value;
 				searched_route = searched_route.toUpperCase();
 				var position = new BusPosition({id: searched_route});
 			} else {
-				alert('Route not found.  Please enter a valid bus route.');
+				displayMessage('Select or search a valid bus route.');
 			}
 		}
 
-		position.fetch({
-			success: function(model, response) {
-				var googleMapView = new GoogleMapView({model : model});
-				showMap();
-				this.$('#map-title').empty().append(googleMapView.render().el);	
-				
-				// var infoView = new InfoView({model : model});
-				var busIncidentView = new BusIncidentView({model : model});
-				
-				clearInfoContainer();
-			}, 
-			error: onErrorHandler
-		});
+		if(position) {
+			position.fetch({
+				success: function(model, response) {
+					var googleMapView = new GoogleMapView({model : model});
+					showMap();
+					this.$('#map-title').empty().append(googleMapView.render().el);	
+					
+					// var infoView = new InfoView({model : model});
+					var busIncidentView = new BusIncidentView({model : model});
+					
+					clearInfoContainer();
+				}, 
+				error: onErrorHandler
+			});
+		}
 	},
 	routeSearch : function(){
 		var route = document.getElementById('route-search-input').value;
 		route = route.toUpperCase();
-		var route_display = document.getElementById('route-search-display');
+		var route_display = document.getElementById('message-display');
 		route_display.style.visibility = 'visible';
 
-		// var display_block = document.getElementById('route-block');
-		// display_block.style.display = "inline-block";
-		// display_block.style.color = "#aaa";
-
-		// document.getElementById('route-id').style.display = "none";
-		
 		var index = this.routeArr.indexOf(route);
 		
 		if(this.routeArr.indexOf(route) > -1) {
-			route_display.innerHTML = 'Route found.';
+			displayMessage('Route found');
 			this.route = true;
 		} else {
-			route_display.innerHTML = 'No route found.';	
+			displayMessage('No route found');
 			this.route = false;
 		}
 	}
@@ -230,9 +228,9 @@ var StopScheduleView = Backbone.View.extend({
 	}, 
 	render: function(){
 		// this.$el.html(this.template(this.stopScheduleObj));
-		$('#info-stop-schedule-container').css('display', 'block');
+		$('#stop-schedule-container').css('display', 'block');
 		this.$el.html(render('stop-schedule-template', this.stopScheduleObj));
-		jumpToYCoordinate(document.getElementById('info-stop-schedule-container'));
+		jumpToYCoordinate(document.getElementById('stop-schedule-container'));
 	},
 	parseTime: function(time){
 		var index = time.indexOf('T');
@@ -431,7 +429,13 @@ function showAlertFlag() {
 
 function clearInfoContainer() {
 	$('#alert-incident, #info-stop-schedule').html("");
-	$('#info-stop-schedule-container').css('display', 'none');
+	$('#stop-schedule-container').css('display', 'none');
+}
+
+function displayMessage(msg) {
+	var message_display = document.getElementById('message-display');
+	message_display.style.visibility = 'visible';
+	message_display.innerHTML = msg;
 }
 
 var appView = new AppView();

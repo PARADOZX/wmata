@@ -2,25 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1.0, user-scalable=no" />
-	<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+	<meta content="initial-scale=1, maximum-scale=1.0, user-scalable=no" name="viewport">
+	
     <title>WMATA Bus Tracker</title>
+    
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
+    <link type="text/css" rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+    
+  
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2Y8qrLyotp9pUoczNmkw96lwawiTpTNY"></script>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-    <script type="text/template" id="stop-schedule-template">
-		<h3>
-			<p>Stop Schedule for <%= StopName %></p>
-			<p><%= TripHeadsign %> <%= TripDirection %></p>
-		</h3>
-		<div>	
-			<ul>
-			<% _.each(ScheduleTime, function(stop) { %> 
-				<li><%= stop %></li>
-			<% }); %>
-			</ul>
-		</div>
-	</script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
+	<script src="bower_components/backbone/backbone-min.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="bower_components/html5shiv/dist/html5shiv.js"></script>
+      <script src="bower_components/respond/dest/respond.src.js"></script>
+    <![endif]-->
+    
 	<script type="text/template" id="incident-template">
 		<ul>
 		<% _.each(incidents, function(i){ %>
@@ -35,47 +41,79 @@
 </head>
 <body>
 
-<header id="top-header">
-	WMATA Bus Tracker
-</header>
-
-<div id="load-screen"><div id="loading">Loading...</div></div>
-<div id="scroll-top-arrow"><div id="scroll-top-inside"></div></div>
-<section id="route-container">
-	<div class="ib" id="route-select">
-		<div id="route-block">select</div>
-		<select id="route-id"></select>
+<div id="container">
+	<div class="jumbotron">
+  		<h1>WMATA Bus Tracker</h1> 
 	</div>
-	<div class="ib" id="route-search">
-		<div id="route-search-title">search</div>
-		<input placeholder="type here" size="6" type="text" id="route-search-input" />
-		<div id="route-search-display">.</div>
-	</div>
-	<button id="route-id-button">go</button>
-</section>
-<section id="alert-container">
-	<div id="alert-flag">
-		<span>ALERT</span>
-		<div id="alert-incident"></div>	
-	</div>
-</section>	
-<section id="map-title"></section>
-<section id="map-container">
-	<div id="map-canvas"></div>
-</section>
-<section id="information-container">
-	<div id="info-main">
-		<div id="info-stop-schedule-container"> 
+	<!--<div id="load-screen"><div id="loading">Loading...</div></div>-->
+	<div class="bg-danger" id="scroll-top-arrow"><div id="scroll-top-inside"></div></div>
+	
+	<section id="route-container">
+		<div class="row">
+			<div class="text-danger" id="message-display">.</div>
+		</div>
+		<div class="row">
+			<div class="ib col-xs-12 col-sm-4 no-padding" id="route-select">
+				<div class="col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1">
+					<div class="input-group">
+		                <select id="route-id" class="form-control">
+		                	<option value="select" selected="selected">select</option>
+		                </select>
+		                <span class="input-group-addon">
+			                <span class="glyphicon glyphicon-triangle-bottom"></span>
+			            </span>
+		            </div>
+				</div>
+			</div>
+			<div class="hidden-lg hidden-md hidden-sm">&nbsp;</div>
+			<div class="ib col-xs-12 col-sm-4 no-padding" id="route-search">
+				<div class="col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1">
+					<div class="input-group">
+		                <input type="text" class="form-control" id="route-search-input" placeholder="Search&hellip;">
+		                <span class="input-group-addon">
+			                <span class="glyphicon glyphicon-search"></span>
+			            </span>
+		            </div>
+				</div>
+			</div>
+			<div class="hidden-lg hidden-md hidden-sm">&nbsp;</div>
+			<div class="col-xs-12 col-sm-4">
+				<button type="button" class="btn btn-md btn-primary col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1" id="route-id-button">Lookup Route</button>	
+			</div>
+		</div>
+	</section>
+	
+	<section id="alert-container">
+		<div id="alert-flag">
+			<span class="text-uppercase">alert</span>
+			<div id="alert-incident"></div>	
+		</div>
+	</section>	
+	
+	<section>
+		<!--<div class="col-xs-12 bg-info" id="map-title"></div>-->
+		<div class="alert alert-info" id="map-title"></div>
+		
+		<div class="col-xs-10 col-xs-offset-1" id="map-container">
+			<div id="map-canvas"></div>
+			<h4 id="map-message" class="text-danger text-right">click bus stop for schedule</h4>
+		</div>
+	</section>
+	
+	<section>
+		<div class="col-xs-12" id="stop-schedule-container"> 
 			<div id="info-stop-schedule"></div>
 		</div>
-	</div>
-</section>
+	</section>
+	
+	<footer class="navbar-default navbar-fixed-bottom">
+	  <div class="container-fluid">
+	    <span>James Chiang copyright 2016</span>
+	  </div>
+	</footer>
+</div> <!-- container -->
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
 <script src="js/script.js"></script>
-
 </body>
 
 </html>

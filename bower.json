@@ -1,0 +1,24 @@
+{
+  "name": "wmata",
+  "homepage": "byjameschiang.com/projects/wmatatracker",
+  "authors": [
+    "jcc9283 <jcc9283@hotmail.com>"
+  ],
+  "description": "wmata tracker app",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.0.0",
+    "backbone": "^1.3.3",
+    "bootstrap": "^3.3.6",
+    "respond": "^1.4.2",
+    "html5shiv": "^3.7.3"
+  }
+}
