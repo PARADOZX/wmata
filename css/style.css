@@ -46,15 +46,9 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-
-
 #alert-flag {
     display: none;
-    width: 500px;
-    background-color: red;
-}
-#alert-incident {
-    display: none;
+    margin-top: 40px;
 }
 #app-container {
     margin-top: 10px;

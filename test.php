@@ -32,15 +32,15 @@ class SendCurl
 
 
 	
-	$id = 'D3';
+	$id = 'S1';
 
 	//incidents
-	// $curl = new SendCurl("http://api.wmata.com/Incidents.svc/json/BusIncidents?Route=D4", true);
+	$curl = new SendCurl("http://api.wmata.com/Incidents.svc/json/BusIncidents?Route=$id", true);
 	// $curl = new SendCurl("http://api.wmata.com/Incidents.svc/json/BusIncidents", true);
 	
 	
 	//elevator
-	$curl = new SendCurl("http://api.wmata.com/Incidents.svc/json/ElevatorIncidents", true);
+	// $curl = new SendCurl("http://api.wmata.com/Incidents.svc/json/ElevatorIncidents", true);
 	
 	//train incidents
 	// $curl = new SendCurl("http://api.wmata.com/Incidents.svc/json/Incidents", true);

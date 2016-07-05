@@ -428,8 +428,8 @@ function showAlertFlag() {
 }
 
 function clearInfoContainer() {
-	$('#alert-incident, #info-stop-schedule').html("");
-	$('#stop-schedule-container').css('display', 'none');
+	$('#info-stop-schedule').html("");
+	$('#alert-flag, #stop-schedule-container').css('display', 'none');
 }
 
 function displayMessage(msg) {
