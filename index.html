@@ -24,18 +24,6 @@
       <script src="bower_components/html5shiv/dist/html5shiv.js"></script>
       <script src="bower_components/respond/dest/respond.src.js"></script>
     <![endif]-->
-    
-	<script type="text/template" id="incident-template">
-		<ul>
-		<% _.each(incidents, function(i){ %>
-			<li>
-				<p><%= i.IncidentType %></p>
-				<p><%= i.Description %></p>
-				<p>Routes Affected: <% _.each(i.RoutesAffected, function(j){ %> <%= j %> <% }); %></p>
-			</li>
-		<% }); %>
-		</ul>
-	</script>
 </head>
 <body>
 
